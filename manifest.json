@@ -1,0 +1,37 @@
+{
+  "hero": [
+    "assets/ctad/01.jpg",
+    "assets/ctad/02.jpg",
+    "assets/ctad/03.jpg"
+  ],
+  "projects": {
+    "ctad": [
+      "assets/ctad/01.jpg","assets/ctad/02.jpg","assets/ctad/03.jpg","assets/ctad/04.jpg","assets/ctad/05.jpg",
+      "assets/ctad/06.jpg","assets/ctad/07.jpg","assets/ctad/08.jpg","assets/ctad/09.jpg","assets/ctad/10.jpg",
+      "assets/ctad/11.jpg","assets/ctad/12.jpg","assets/ctad/13.jpg","assets/ctad/14.jpg","assets/ctad/15.jpg",
+      "assets/ctad/16.jpg","assets/ctad/17.jpg","assets/ctad/18.jpg","assets/ctad/19.jpg","assets/ctad/20.jpg"
+    ],
+    "cleanups": [
+      "assets/cleanups/01.jpg","assets/cleanups/02.jpg","assets/cleanups/03.jpg","assets/cleanups/04.jpg","assets/cleanups/05.jpg",
+      "assets/cleanups/06.jpg","assets/cleanups/07.jpg","assets/cleanups/08.jpg","assets/cleanups/09.jpg","assets/cleanups/10.jpg",
+      "assets/cleanups/11.jpg","assets/cleanups/12.jpg","assets/cleanups/13.jpg","assets/cleanups/14.jpg","assets/cleanups/15.jpg",
+      "assets/cleanups/16.jpg","assets/cleanups/17.jpg","assets/cleanups/18.jpg","assets/cleanups/19.jpg","assets/cleanups/20.jpg"
+    ],
+    "mahjong": [
+      "assets/mahjong/01.jpg","assets/mahjong/02.jpg","assets/mahjong/03.jpg","assets/mahjong/04.jpg","assets/mahjong/05.jpg",
+      "assets/mahjong/06.jpg","assets/mahjong/07.jpg","assets/mahjong/08.jpg","assets/mahjong/09.jpg","assets/mahjong/10.jpg",
+      "assets/mahjong/11.jpg","assets/mahjong/12.jpg","assets/mahjong/13.jpg","assets/mahjong/14.jpg","assets/mahjong/15.jpg",
+      "assets/mahjong/16.jpg","assets/mahjong/17.jpg","assets/mahjong/18.jpg","assets/mahjong/19.jpg","assets/mahjong/20.jpg"
+    ],
+    "hope-stoves": [
+      "assets/hope-stoves/01.jpg","assets/hope-stoves/02.jpg","assets/hope-stoves/03.jpg","assets/hope-stoves/04.jpg","assets/hope-stoves/05.jpg",
+      "assets/hope-stoves/06.jpg","assets/hope-stoves/07.jpg","assets/hope-stoves/08.jpg","assets/hope-stoves/09.jpg","assets/hope-stoves/10.jpg",
+      "assets/hope-stoves/11.jpg","assets/hope-stoves/12.jpg","assets/hope-stoves/13.jpg","assets/hope-stoves/14.jpg","assets/hope-stoves/15.jpg",
+      "assets/hope-stoves/16.jpg","assets/hope-stoves/17.jpg","assets/hope-stoves/18.jpg","assets/hope-stoves/19.jpg","assets/hope-stoves/20.jpg"
+    ],
+    "housing": [
+     "assets/housing/01.jpg"
+    ]
+
+  }
+}
