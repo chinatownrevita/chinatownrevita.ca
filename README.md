@@ -55,6 +55,27 @@ The site is intentionally lightweight and easy to maintain.
 
 ---
 
+## Making changes safely
+
+For small edits:
+
+* Use GitHub’s web editor
+* Commit directly to `main`
+
+For larger edits:
+
+* Clone the repository locally
+* Test changes in a browser
+* Push when ready
+
+All changes should be accompanied by an entry to 'CHANGELOG.md' The changelog provides a narrative record of:
+
+* When major changes were made
+* What was added, changed or removed
+* Why certain decisions were taken
+
+---
+
 ## Updating text content
 
 All public copy lives directly in `index.html`.
@@ -117,21 +138,6 @@ No server maintenance is required.
 
 ---
 
-## Making changes safely
-
-For small edits:
-
-* Use GitHub’s web editor
-* Commit directly to `main`
-
-For larger edits:
-
-* Clone the repository locally
-* Test changes in a browser
-* Push when ready
-
----
-
 ## Accessibility & tone
 
 When making changes, please keep in mind:
@@ -140,18 +146,6 @@ When making changes, please keep in mind:
 * Community-centred tone
 * Respectful representation of Chinatown and its people
 * Avoid jargon or overly technical language
-
----
-
-## Future work (planned, not active)
-
-Ideas that may be explored in the future:
-
-* bilingual (English / Traditional Chinese) toggle
-* expanded accessibility features
-* additional project pages if needed
-
-These are **not active development priorities** unless explicitly agreed upon by the team.
 
 ---
 
