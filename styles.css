@@ -384,8 +384,8 @@ a{color:inherit}
   .get-involved-photo img{ height: 280px; }
 }
 #beliefs h3 {
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 1.3;
+  letter-spacing: 0.05em;
+  line-height: 1.25;
 }
