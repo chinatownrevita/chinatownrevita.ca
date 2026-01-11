@@ -385,8 +385,8 @@ a{color:inherit}
 }
 /* What Guides Our Work — improve h3 legibility */
 #beliefs h3 {
-  font-weight: 500;          /* was likely 600–700 */
-  letter-spacing: 0.04em;    /* adds breathing room */
+  font-weight: 400;          /* was likely 600–700 */
+  letter-spacing: 0.05em;    /* adds breathing room */
   line-height: 1.25;         /* prevents vertical crowding */
   text-transform: uppercase; /* optional — remove if not desired */
 }
