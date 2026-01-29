@@ -7,7 +7,6 @@ async function loadManifest(){
 function startRotator(container, sources, intervalMs = 4200){
   if(!sources || sources.length === 0) return;
 
-  // Use a single <img> and swap src. This avoids blanks and handles missing files gracefully.
   const img = document.createElement("img");
   img.alt = "";
   img.loading = "lazy";
@@ -19,20 +18,11 @@ function startRotator(container, sources, intervalMs = 4200){
     if(!sources.length) return;
     img.classList.remove("active");
 
-    // Try next source; if it fails, skip forward automatically.
     const src = sources[idx % sources.length];
     idx = (idx + 1) % sources.length;
 
-    img.onerror = () => {
-      // skip missing/bad files immediately
-      showNext();
-    };
-
-    img.onload = () => {
-      // small delay so transitions feel smooth
-      requestAnimationFrame(() => img.classList.add("active"));
-    };
-
+    img.onerror = () => showNext();
+    img.onload = () => requestAnimationFrame(() => img.classList.add("active"));
     img.src = src;
   }
 
@@ -40,7 +30,56 @@ function startRotator(container, sources, intervalMs = 4200){
   window.setInterval(showNext, intervalMs);
 }
 
-(async function init(){
+function initCTADVideo(){
+  const video = document.getElementById("ctadVideo");
+  const wrap  = document.querySelector(".video-wrap");
+  const muteBtn = document.getElementById("ctadMuteBtn");
+  const fsBtn   = document.getElementById("ctadFsBtn");
+
+  if(!video || !wrap || !muteBtn || !fsBtn){
+    console.warn("CTAD video elements not found. Check IDs in index.html.");
+    return;
+  }
+
+  // Attempt autoplay (will be muted so usually allowed)
+  video.play().catch(() => { /* ok */ });
+
+  const syncMuteLabel = () => {
+    muteBtn.textContent = video.muted ? "Unmute" : "Mute";
+    muteBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+  };
+  syncMuteLabel();
+
+  muteBtn.addEventListener("click", () => {
+    video.muted = !video.muted;
+    if(!video.muted) video.volume = 1;
+    video.play().catch(() => { /* ok */ });
+    syncMuteLabel();
+  });
+
+  fsBtn.addEventListener("click", async () => {
+    try{
+      // Prefer fullscreen on the wrapper (more reliable for layout)
+      if(wrap.requestFullscreen){
+        await wrap.requestFullscreen();
+        return;
+      }
+      // iOS Safari fallback: fullscreen the video
+      if(video.webkitEnterFullscreen){
+        // iOS often behaves better if controls are enabled for fullscreen
+        video.controls = true;
+        video.play().catch(() => {});
+        video.webkitEnterFullscreen();
+        return;
+      }
+      console.warn("Fullscreen not supported in this browser.");
+    }catch(e){
+      console.warn("Fullscreen failed:", e);
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
   let manifest;
   try{
     manifest = await loadManifest();
@@ -61,70 +100,13 @@ function startRotator(container, sources, intervalMs = 4200){
     startRotator(heroSlides, manifest.hero || [], 5200);
   }
 
-  // PROJECT slideshows (independent by default; each gets its own timer)
+  // PROJECT slideshows
   document.querySelectorAll(".slideshow").forEach(el => {
     const key = el.dataset.project;
     const sources = (manifest.projects && manifest.projects[key]) ? manifest.projects[key] : [];
     startRotator(el, sources, 4200);
-    initCTADVideo();
-  });
-})();
-function initCTADVideo(){
-  const video = document.getElementById("ctadVideo");
-  const muteBtn = document.getElementById("ctadMuteBtn");
-  const fsBtn = document.getElementById("ctadFsBtn");
-
-  if(!video || !muteBtn || !fsBtn){
-    console.warn("CTAD video elements not found. Check IDs in index.html.");
-    return;
-  }
-
-  // Try autoplay politely (some browsers block until user gesture)
-  video.play().catch(() => { /* ok */ });
-
-  const syncMuteLabel = () => {
-    muteBtn.textContent = video.muted ? "Unmute" : "Mute";
-    muteBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
-  };
-  syncMuteLabel();
-
-  muteBtn.addEventListener("click", () => {
-    video.muted = !video.muted;
-
-    // iOS sometimes needs volume explicitly set after unmuting
-    if(!video.muted) video.volume = 1;
-
-    video.play().catch(() => { /* ok */ });
-    syncMuteLabel();
   });
 
-  fsBtn.addEventListener("click", async () => {
-    try{
-      // Standard Fullscreen API (desktop + many mobile browsers)
-      if(video.requestFullscreen){
-        await video.requestFullscreen();
-        return;
-      }
-
-      // iOS Safari fallback: enable native controls and ask video to fullscreen
-      // Note: this only works on iPhone/iPad Safari and must be triggered by user gesture (this click is ok)
-      if(video.webkitEnterFullscreen){
-        video.controls = true;       // iOS often requires controls for fullscreen
-        video.muted = video.muted;   // no-op; keeps state
-        video.play().catch(() => {});
-        video.webkitEnterFullscreen();
-        return;
-      }
-
-      console.warn("Fullscreen not supported in this browser.");
-    }catch(e){
-      console.warn("Fullscreen failed:", e);
-    }
-  });
-}
-window.addEventListener("DOMContentLoaded", () => {
-  // your existing slideshow init can stay as-is
+  // CTAD video buttons
   initCTADVideo();
 });
-
-}
