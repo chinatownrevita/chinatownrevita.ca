@@ -88,8 +88,30 @@
 
         <article class="project" data-project="ctad">
           <div class="project-media">
-            <div class="slideshow" data-project="ctad" aria-label="Chinatown After Dark photos"></div>
-          </div>
+  <div class="video-wrap" aria-label="Chinatown After Dark 2025 video">
+    <video
+      id="ctadVideo"
+      class="ctad-video"
+      src="assets/video/ctad-2025.mp4"
+      poster="assets/video/ctad-2025-poster.jpg"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+    ></video>
+
+    <div class="video-controls">
+      <button type="button" class="video-btn" id="ctadMuteBtn" aria-label="Unmute video">
+        Unmute
+      </button>
+      <button type="button" class="video-btn" id="ctadFsBtn" aria-label="Fullscreen video">
+        Fullscreen
+      </button>
+    </div>
+  </div>
+</div>
+
           <div class="project-card">
             <h3>Chinatown After Dark</h3>
             <p>Our flagship monthly arts and culture series transforms Chinatown into a vibrant public gathering place from May to September. Imagine Taste of Edmonton, taking place in a back alley in Chinatown, across 20+ local restaurants.</p>
