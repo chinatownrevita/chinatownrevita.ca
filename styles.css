@@ -406,6 +406,8 @@ a{color:inherit}
   display: block;
   object-fit: cover;
   object-position: bottom; /* match your photo framing preference */
+  position: relative;
+  z-index: 1;
 }
 
 .video-controls{
@@ -417,6 +419,7 @@ a{color:inherit}
   gap: 10px;
   justify-content: space-between;
   pointer-events: none; /* allow clicks only on buttons */
+  z-index: 5;
 }
 
 .video-btn{
