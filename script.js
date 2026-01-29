@@ -66,5 +66,42 @@ function startRotator(container, sources, intervalMs = 4200){
     const key = el.dataset.project;
     const sources = (manifest.projects && manifest.projects[key]) ? manifest.projects[key] : [];
     startRotator(el, sources, 4200);
+    initCTADVideo();
   });
 })();
+function initCTADVideo(){
+  const video = document.getElementById("ctadVideo");
+  if(!video) return;
+
+  const muteBtn = document.getElementById("ctadMuteBtn");
+  const fsBtn = document.getElementById("ctadFsBtn");
+
+  // Some browsers block autoplay until play() is called; try politely.
+  video.play().catch(() => { /* ignore */ });
+
+  if(muteBtn){
+    const syncMuteLabel = () => {
+      muteBtn.textContent = video.muted ? "Unmute" : "Mute";
+      muteBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+    };
+    syncMuteLabel();
+
+    muteBtn.addEventListener("click", () => {
+      video.muted = !video.muted;
+      // if user unmutes, ensure it's actually playing
+      video.play().catch(() => {});
+      syncMuteLabel();
+    });
+  }
+
+  if(fsBtn){
+    fsBtn.addEventListener("click", async () => {
+      try{
+        if(video.requestFullscreen) await video.requestFullscreen();
+        else if(video.webkitEnterFullscreen) video.webkitEnterFullscreen(); // iOS Safari
+      }catch(e){
+        console.warn("Fullscreen failed:", e);
+      }
+    });
+  }
+}
