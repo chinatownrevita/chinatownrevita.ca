@@ -71,37 +71,60 @@ function startRotator(container, sources, intervalMs = 4200){
 })();
 function initCTADVideo(){
   const video = document.getElementById("ctadVideo");
-  if(!video) return;
-
   const muteBtn = document.getElementById("ctadMuteBtn");
   const fsBtn = document.getElementById("ctadFsBtn");
 
-  // Some browsers block autoplay until play() is called; try politely.
-  video.play().catch(() => { /* ignore */ });
+  if(!video || !muteBtn || !fsBtn){
+    console.warn("CTAD video elements not found. Check IDs in index.html.");
+    return;
+  }
 
-  if(muteBtn){
-    const syncMuteLabel = () => {
-      muteBtn.textContent = video.muted ? "Unmute" : "Mute";
-      muteBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
-    };
+  // Try autoplay politely (some browsers block until user gesture)
+  video.play().catch(() => { /* ok */ });
+
+  const syncMuteLabel = () => {
+    muteBtn.textContent = video.muted ? "Unmute" : "Mute";
+    muteBtn.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+  };
+  syncMuteLabel();
+
+  muteBtn.addEventListener("click", () => {
+    video.muted = !video.muted;
+
+    // iOS sometimes needs volume explicitly set after unmuting
+    if(!video.muted) video.volume = 1;
+
+    video.play().catch(() => { /* ok */ });
     syncMuteLabel();
+  });
 
-    muteBtn.addEventListener("click", () => {
-      video.muted = !video.muted;
-      // if user unmutes, ensure it's actually playing
-      video.play().catch(() => {});
-      syncMuteLabel();
-    });
-  }
-
-  if(fsBtn){
-    fsBtn.addEventListener("click", async () => {
-      try{
-        if(video.requestFullscreen) await video.requestFullscreen();
-        else if(video.webkitEnterFullscreen) video.webkitEnterFullscreen(); // iOS Safari
-      }catch(e){
-        console.warn("Fullscreen failed:", e);
+  fsBtn.addEventListener("click", async () => {
+    try{
+      // Standard Fullscreen API (desktop + many mobile browsers)
+      if(video.requestFullscreen){
+        await video.requestFullscreen();
+        return;
       }
-    });
-  }
+
+      // iOS Safari fallback: enable native controls and ask video to fullscreen
+      // Note: this only works on iPhone/iPad Safari and must be triggered by user gesture (this click is ok)
+      if(video.webkitEnterFullscreen){
+        video.controls = true;       // iOS often requires controls for fullscreen
+        video.muted = video.muted;   // no-op; keeps state
+        video.play().catch(() => {});
+        video.webkitEnterFullscreen();
+        return;
+      }
+
+      console.warn("Fullscreen not supported in this browser.");
+    }catch(e){
+      console.warn("Fullscreen failed:", e);
+    }
+  });
+}
+window.addEventListener("DOMContentLoaded", () => {
+  // your existing slideshow init can stay as-is
+  initCTADVideo();
+});
+
 }
