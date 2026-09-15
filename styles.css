@@ -169,6 +169,14 @@ a{color:inherit}
   font-size: 14px;
 }
 
+/* INSTAGRAM */
+.instagram{padding: 70px 0 26px;}
+.instagram h2{
+  font-size: 34px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
 /* PROJECTS */
 .projects{padding: 18px 0 36px;}
 .section-title{
