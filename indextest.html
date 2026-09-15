@@ -83,34 +83,50 @@
       <div class="wrap">
         <h2>Social Feed</h2>
         <behold-widget feed-id="uFJjEQiIuU19N90UHgiy"></behold-widget>
+
+
 <script>
-  (() => {
-    if (window.__bhldScript) return;
-    window.__bhldScript = true;
+(() => {
+  if (window.__bhldScript) return;
+  window.__bhldScript = true;
 
-    const d = document;
+  // Capture closed shadow roots
+  const originalAttachShadow = Element.prototype.attachShadow;
 
-    const hideBranding = () => {
-      d.querySelectorAll('.branding').forEach(el => {
-        el.style.setProperty('display', 'none', 'important');
+  Element.prototype.attachShadow = function(options) {
+    const root = originalAttachShadow.call(this, options);
+
+    if (this.tagName.toLowerCase() === 'behold-widget') {
+      const hideBranding = () => {
+        root.querySelectorAll('a.branding').forEach(el => {
+          el.style.display = 'none';
+        });
+      };
+
+      // Watch elements added inside the shadow root
+      const observer = new MutationObserver(hideBranding);
+
+      observer.observe(root, {
+        childList: true,
+        subtree: true
       });
-    };
 
-    // Hide it if it already exists
-    hideBranding();
+      hideBranding();
+    }
 
-    // Hide it when the widget dynamically adds it
-    new MutationObserver(hideBranding).observe(d.documentElement, {
-      childList: true,
-      subtree: true
-    });
+    return root;
+  };
 
-    const s = d.createElement('script');
-    s.type = 'module';
-    s.src = 'https://w.behold.so/widget.js';
-    setTimeout(() => d.head.append(s), 0);
-  })();
+  // Load Behold
+  const d = document;
+  const s = d.createElement("script");
+  s.type = "module";
+  s.src = "https://w.behold.so/widget.js";
+
+  setTimeout(() => d.head.append(s), 0);
+})();
 </script>
+        
 
       </div>
     </section>
