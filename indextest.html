@@ -85,11 +85,33 @@
         <behold-widget feed-id="uFJjEQiIuU19N90UHgiy"></behold-widget>
 <script>
   (() => {
-    if(window.__bhldScript)return;window.__bhldScript=true;
-    const d=document,s=d.createElement("script");s.type="module";
-    s.src="https://w.behold.so/widget.js";setTimeout(()=>{d.head.append(s);},0);
+    if (window.__bhldScript) return;
+    window.__bhldScript = true;
+
+    const d = document;
+
+    const hideBranding = () => {
+      d.querySelectorAll('.branding').forEach(el => {
+        el.style.setProperty('display', 'none', 'important');
+      });
+    };
+
+    // Hide it if it already exists
+    hideBranding();
+
+    // Hide it when the widget dynamically adds it
+    new MutationObserver(hideBranding).observe(d.documentElement, {
+      childList: true,
+      subtree: true
+    });
+
+    const s = d.createElement('script');
+    s.type = 'module';
+    s.src = 'https://w.behold.so/widget.js';
+    setTimeout(() => d.head.append(s), 0);
   })();
 </script>
+
       </div>
     </section>
 
