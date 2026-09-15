@@ -441,3 +441,8 @@ a{color:inherit}
   transform: translateY(-1px);
   background: rgba(0,0,0,.70);
 }
+
+behold-branding,
+a.branding {
+  display: none !important;
+}
