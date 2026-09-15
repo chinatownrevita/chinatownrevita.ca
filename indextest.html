@@ -84,46 +84,60 @@
         <h2>Social Feed</h2>
         <behold-widget feed-id="uFJjEQiIuU19N90UHgiy"></behold-widget>
 
-
 <script>
 (() => {
   if (window.__bhldScript) return;
   window.__bhldScript = true;
 
-  // Capture closed shadow roots
+  // 1. Intercept attachShadow calls so we can reach into "closed" roots
+  const shadowRoots = new WeakMap();
   const originalAttachShadow = Element.prototype.attachShadow;
 
-  Element.prototype.attachShadow = function(options) {
-    const root = originalAttachShadow.call(this, options);
-
-    if (this.tagName.toLowerCase() === 'behold-widget') {
-      const hideBranding = () => {
-        root.querySelectorAll('a.branding').forEach(el => {
-          el.style.display = 'none';
-        });
-      };
-
-      // Watch elements added inside the shadow root
-      const observer = new MutationObserver(hideBranding);
-
-      observer.observe(root, {
-        childList: true,
-        subtree: true
-      });
-
-      hideBranding();
-    }
-
+  Element.prototype.attachShadow = function (init) {
+    // Keep a real reference regardless of requested mode
+    const root = originalAttachShadow.call(this, init);
+    shadowRoots.set(this, root);
     return root;
   };
 
-  // Load Behold
-  const d = document;
-  const s = d.createElement("script");
+  function hideBranding(root) {
+    const style = document.createElement('style');
+    style.textContent = `a.branding { display: none !important; }`;
+    root.appendChild(style);
+  }
+
+  function tryHideOn(el) {
+    const root = shadowRoots.get(el);
+    if (root) {
+      // Branding link may not exist yet if content renders async
+      hideBranding(root);
+      // Also watch for it in case it's added later
+      const mo = new MutationObserver(() => {
+        const brandEl = root.querySelector('a.branding');
+        if (brandEl) brandEl.style.setProperty('display', 'none', 'important');
+      });
+      mo.observe(root, { childList: true, subtree: true });
+    }
+  }
+
+  // 2. Watch the document for the widget element appearing/upgrading
+  const widget = document.querySelector('behold-widget');
+  if (widget) tryHideOn(widget);
+  else {
+    new MutationObserver((mutations, obs) => {
+      const w = document.querySelector('behold-widget');
+      if (w) {
+        tryHideOn(w);
+        obs.disconnect();
+      }
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  // 3. Load the widget script as before
+  const d = document, s = d.createElement("script");
   s.type = "module";
   s.src = "https://w.behold.so/widget.js";
-
-  setTimeout(() => d.head.append(s), 0);
+  setTimeout(() => { d.head.append(s); }, 0);
 })();
 </script>
         
