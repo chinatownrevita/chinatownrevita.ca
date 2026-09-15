@@ -24,7 +24,6 @@
 <meta name="twitter:title" content="Re:VITA | Building Community with Care in Chinatown" />
 <meta name="twitter:description" content="A grassroots, youth-driven organization building belonging, vibrancy, and long-term wellbeing in Edmonton’s Chinatown through events and community action." />
 <meta name="twitter:image" content="https://chinatownrevita.ca/assets/og-image.jpg" />
-
 </head>
 
 <body>
@@ -80,6 +79,89 @@
     </section>
 
     <!-- FEATURED MOMENTS: removed -->
+    <section class="instagram" aria-label="Instagram">
+      <div class="wrap">
+        <h2>Social Feed</h2>
+<behold-widget feed-id="uFJjEQiIuU19N90UHgiy"></behold-widget>
+<script>
+(() => {
+  if (window.__bhldScript) return;
+  window.__bhldScript = true;
+
+  // 1. Patch attachShadow so we can capture the closed root on <behold-widget>
+  const closedRoots = new WeakMap();
+  const originalAttachShadow = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function (init) {
+    const root = originalAttachShadow.call(this, init);
+    closedRoots.set(this, root);
+    return root;
+  };
+
+  function hideBranding(gridEl) {
+    // behold-grid's shadow root is OPEN, so this is directly accessible
+    const openRoot = gridEl.shadowRoot;
+    if (!openRoot) return;
+
+    const apply = () => {
+      const a = openRoot.querySelector('a.branding');
+      if (a) a.style.setProperty('display', 'none', 'important');
+    };
+
+    apply();
+    // Content inside renders async, so keep watching briefly
+    const mo = new MutationObserver(apply);
+    mo.observe(openRoot, { childList: true, subtree: true });
+  }
+
+  function trySetup(widgetEl) {
+    const closedRoot = closedRoots.get(widgetEl);
+    if (!closedRoot) return false;
+
+    const grid = closedRoot.querySelector('behold-grid');
+    if (grid) {
+      if (grid.shadowRoot) hideBranding(grid);
+      else {
+        // behold-grid itself may not have attached its shadow root yet
+        const mo = new MutationObserver(() => {
+          if (grid.shadowRoot) {
+            hideBranding(grid);
+            mo.disconnect();
+          }
+        });
+        mo.observe(closedRoot, { childList: true, subtree: true });
+      }
+      return true;
+    }
+    return false;
+  }
+
+  function waitForWidget() {
+    const widget = document.querySelector('behold-widget');
+    if (widget && trySetup(widget)) return;
+
+    const mo = new MutationObserver(() => {
+      const w = document.querySelector('behold-widget');
+      if (w && trySetup(w)) mo.disconnect();
+    });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  }
+
+  waitForWidget();
+
+  // 2. Load the widget script as before
+  const d = document, s = d.createElement("script");
+  s.type = "module";
+  s.src = "https://w.behold.so/widget.js";
+  setTimeout(() => { d.head.append(s); }, 0);
+})();
+</script>
+
+
+        
+        
+
+      </div>
+    </section>
 
     <!-- WHAT WE DO: side-by-side slideshow panels + solid text cards for legibility -->
     <section id="what-we-do" class="projects" aria-label="What we do">
@@ -243,5 +325,6 @@
 
   gtag('config', 'G-42VPVYJC47');
 </script>
+  <style>behold-branding, a.branding { display: none !important;}</style>
 </body>
 </html>
